@@ -1,0 +1,28 @@
+PODS:
+  - Material (3.1.8):
+    - Material/Core (= 3.1.8)
+  - Material/Core (3.1.8):
+    - Motion (~> 3.1.1)
+  - Motion (3.1.3):
+    - Motion/Core (= 3.1.3)
+  - Motion/Core (3.1.3)
+  - PureLayout (3.1.6)
+
+DEPENDENCIES:
+  - Material
+  - PureLayout
+
+SPEC REPOS:
+  trunk:
+    - Material
+    - Motion
+    - PureLayout
+
+SPEC CHECKSUMS:
+  Material: a2a3f400a3b549d53ef89e56c58c4535b29db387
+  Motion: cf1e060e489f6661126374d5c60dbd2ed991605c
+  PureLayout: bd3c4ec3a3819ad387c99ebb72c6b129c3ed4d2d
+
+PODFILE CHECKSUM: bf80f0b048319edf3c2c5c670ce3e969fd708092
+
+COCOAPODS: 1.10.0.beta.1
