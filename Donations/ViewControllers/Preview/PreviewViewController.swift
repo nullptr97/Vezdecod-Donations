@@ -14,11 +14,13 @@ class PreviewViewController: BaseViewController {
 
     let dismissButton: IconButton = {
         let button = IconButton(image: UIImage(named: "dismiss_24"))
+        button.addTarget(self, action: #selector(dismiss(_:)), for: .touchUpInside)
         return button
     }()
     
     let sendButton: IconButton = {
         let button = IconButton(image: UIImage(named: "send_sign_28"))
+        button.addTarget(self, action: #selector(sendPost), for: .touchUpInside)
         return button
     }()
     
@@ -72,6 +74,7 @@ class PreviewViewController: BaseViewController {
         snippetView.coverImageView.image = image
         snippetView.title = title
         snippetView.author = author
+        snippetView.helpButton.isEnabled = false
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -135,5 +138,11 @@ class PreviewViewController: BaseViewController {
             options: animationCurve,
             animations: { self.view.layoutIfNeeded() },
             completion: nil)
+    }
+    
+    @objc func sendPost() {
+        let newsViewController = NewsViewController(snippetView: self.snippetView)
+        newsViewController.modalPresentationStyle = .fullScreen
+        present(newsViewController, animated: true)
     }
 }

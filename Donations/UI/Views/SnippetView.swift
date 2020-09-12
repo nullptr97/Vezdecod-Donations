@@ -14,6 +14,7 @@ class SnippetView: View {
         let view = UIImageView()
         view.backgroundColor = .adaptableWhite
         view.contentMode = .scaleAspectFill
+        view.clipsToBounds = true
         view.isUserInteractionEnabled = false
         return view
     }()
@@ -100,6 +101,7 @@ class SnippetView: View {
         helpButton.autoPinEdge(.top, to: .bottom, of: dividerView, withOffset: 11.5)
         helpButton.autoPinEdge(.trailing, to: .trailing, of: self, withOffset: -12)
         helpButton.autoPinEdge(.bottom, to: .bottom, of: self, withOffset: -12)
+        helpButton.autoSetDimensions(to: .custom(86, 30))
         
         firstHelpLabel.autoPinEdge(.top, to: .bottom, of: dividerView, withOffset: 11.5)
         firstHelpLabel.autoPinEdge(.leading, to: .leading, of: self, withOffset: 12)
