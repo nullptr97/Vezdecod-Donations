@@ -9,13 +9,14 @@ import Foundation
 import Material
 import UIKit
 
-protocol CoverDelegate: class {
+protocol TableViewCellDelegate: class {
     func onTapAddCover(from cell: CoverTableViewCell, with sender: UIView)
+    func onTapNext(from cell: ConfrimTableViewCell)
 }
 
 class CoverTableViewCell: UITableViewCell {
     static let reuseIdentifier: String = String(describing: CoverTableViewCell.self)
-    weak var delegate: CoverDelegate?
+    weak var delegate: TableViewCellDelegate?
     
     let coverView: DashedLineView = {
         let view = DashedLineView()
@@ -34,6 +35,12 @@ class CoverTableViewCell: UITableViewCell {
         return button
     }()
     
+    let coverImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        return imageView
+    }()
+    
     func setup() {
         contentView.isUserInteractionEnabled = false
         addSubview(coverView)
@@ -43,6 +50,8 @@ class CoverTableViewCell: UITableViewCell {
         addImageButton.autoCenterInSuperview()
         addImageButton.autoSetDimension(.height, toSize: 28)
         addImageButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: -8)
+        coverView.addSubview(coverImageView)
+        coverImageView.autoPinEdgesToSuperviewEdges()
         
         coverView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTapAddCover)))
     }

@@ -17,6 +17,7 @@ class ExtendedNavigationController: UINavigationController, UINavigationControll
     public override func viewDidLoad() {
         super.viewDidLoad()
         invisible = true
+        modalPresentationStyle = .fullScreen
     
         view.addGestureRecognizer(fullScreenPanGestureRecognizer)
         delegate = self

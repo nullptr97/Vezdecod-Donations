@@ -40,6 +40,7 @@ class CloseMorePairButtonView: View {
         super.layoutSubviews()
         
         translatesAutoresizingMaskIntoConstraints = false
+        autoSetDimension(.width, toSize: 86)
         
         addSubview(coreView)
         coreView.addSubview(moreButton)
@@ -47,7 +48,8 @@ class CloseMorePairButtonView: View {
         coreView.addSubview(exitButton)
         
         coreView.autoSetDimensions(to: CGSize(width: 88, height: 32))
-        coreView.autoPinEdge(.trailing, to: .trailing, of: self, withOffset: 16)
+        coreView.autoPinEdge(.trailing, to: .trailing, of: self, withOffset: -4)
+        coreView.autoPinEdge(.leading, to: .leading, of: self, withOffset: 4)
         coreView.autoAlignAxis(toSuperviewAxis: .horizontal)
         
         dividerView.autoCenterInSuperview()
@@ -57,12 +59,12 @@ class CloseMorePairButtonView: View {
         
         moreButton.autoPinEdge(.top, to: .top, of: coreView, withOffset: 0)
         moreButton.autoPinEdge(.leading, to: .leading, of: coreView, withOffset: 0)
-        moreButton.autoPinEdge(.trailing, to: .leading, of: dividerView, withOffset: -0)
-        moreButton.autoPinEdge(.bottom, to: .bottom, of: coreView, withOffset: -0)
+        moreButton.autoPinEdge(.trailing, to: .leading, of: dividerView, withOffset: 0)
+        moreButton.autoPinEdge(.bottom, to: .bottom, of: coreView, withOffset: 0)
         
         exitButton.autoPinEdge(.top, to: .top, of: coreView, withOffset: 0)
         exitButton.autoPinEdge(.leading, to: .trailing, of: dividerView, withOffset: 0)
-        exitButton.autoPinEdge(.trailing, to: .trailing, of: coreView, withOffset: -0)
-        exitButton.autoPinEdge(.bottom, to: .bottom, of: coreView, withOffset: -0)
+        exitButton.autoPinEdge(.trailing, to: .trailing, of: coreView, withOffset: 0)
+        exitButton.autoPinEdge(.bottom, to: .bottom, of: coreView, withOffset: 0)
     }
 }

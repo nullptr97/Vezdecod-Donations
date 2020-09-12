@@ -11,6 +11,7 @@ import Material
 
 class ConfrimTableViewCell: UITableViewCell {
     static let reuseIdentifier: String = String(describing: ConfrimTableViewCell.self)
+    weak var delegate: TableViewCellDelegate?
     
     let addImageButton: FlatButton = {
         let button = FlatButton()
@@ -26,16 +27,16 @@ class ConfrimTableViewCell: UITableViewCell {
         super.prepareForReuse()
         addImageButton.image = nil
     }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        addSubview(addImageButton)
-    }
-    
+
     func setup() {
         contentView.isUserInteractionEnabled = false
         addSubview(addImageButton)
         addImageButton.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12 ))
         addImageButton.autoSetDimension(.height, toSize: 44)
+        addImageButton.addTarget(self, action: #selector(onTapNext), for: .touchUpInside)
+    }
+    
+    @objc func onTapNext() {
+        delegate?.onTapNext(from: self)
     }
 }

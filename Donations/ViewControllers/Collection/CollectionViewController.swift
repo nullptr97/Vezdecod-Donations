@@ -61,17 +61,17 @@ class CollectionViewController: BaseViewController {
         mainTable.register(ConfrimTableViewCell.self, forCellReuseIdentifier: ConfrimTableViewCell.reuseIdentifier)
         mainTable.delegate = self
         mainTable.dataSource = self
+        mainTable.keyboardDismissMode = .onDrag
     }
     
     @objc func keyboardNotification(notification: NSNotification) {
         guard let userInfo = notification.userInfo else { return }
         
         let endFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
-        let endFrameY = endFrame?.origin.y ?? 0
-        let duration:TimeInterval = (userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
+        let duration: TimeInterval = (userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
         let animationCurveRawNSN = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? NSNumber
         let animationCurveRaw = animationCurveRawNSN?.uintValue ?? UIView.AnimationOptions.curveEaseInOut.rawValue
-        let animationCurve:UIView.AnimationOptions = UIView.AnimationOptions(rawValue: animationCurveRaw)
+        let animationCurve: UIView.AnimationOptions = UIView.AnimationOptions(rawValue: animationCurveRaw)
         
         mainTable.contentInset.bottom = endFrame?.size.height ?? 0
         keyboardHeight = endFrame?.size.height ?? 0
@@ -114,6 +114,7 @@ extension CollectionViewController: UITableViewDelegate, UITableViewDataSource {
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: ConfrimTableViewCell.reuseIdentifier, for: indexPath) as! ConfrimTableViewCell
             cell.setup()
+            cell.delegate = self
             cell.selectionStyle = .none
             return cell
         default:
@@ -129,22 +130,56 @@ extension CollectionViewController: UITableViewDelegate, UITableViewDataSource {
         return 3
     }
 }
-extension CollectionViewController: ImagePickerDelegate, CoverDelegate {
+extension CollectionViewController: ImagePickerDelegate, TableViewCellDelegate {
     func onTapAddCover(from cell: CoverTableViewCell, with sender: UIView) {
         imagePicker.present(from: sender)
     }
     
+    func onTapNext(from cell: ConfrimTableViewCell) {
+        var completedViewsCount = 0
+        for (index, _) in descriptions.enumerated() {
+            guard let cell = mainTable.cellForRow(at: IndexPath(row: index, section: 1)) as? InputFieldTableViewCell else { return }
+            let hasNeedText = collectionType == .target ? (index == descriptions.count - 1) : (index == descriptions.count - 1 || index == descriptions.count - 2)
+            if cell.inputTextView.isEmpty && !hasNeedText {
+                cell.inputTextView.drawBorder(10, width: 0.5, color: .color(from: 0xE64646))
+                cell.inputTextView.backgroundColor = .color(from: 0xFAEBEB)
+            } else {
+                completedViewsCount += 1
+            }
+        }
+        guard completedViewsCount == descriptions.count else { return }
+        if collectionType == .target {
+            guard
+                let cell1 = mainTable.cellForRow(at: IndexPath(row: 0, section: 1)) as? InputFieldTableViewCell,
+                let cell2 = mainTable.cellForRow(at: IndexPath(row: 0, section: 0)) as? CoverTableViewCell
+            else { return }
+            navigationController?.pushViewController(AdditionallyViewController(title: cell1.inputTextView.text, image: cell2.coverImageView.image), animated: true)
+        } else {
+            guard
+                let cell1 = mainTable.cellForRow(at: IndexPath(row: 0, section: 1)) as? InputFieldTableViewCell,
+                let cell2 = mainTable.cellForRow(at: IndexPath(row: 0, section: 0)) as? CoverTableViewCell
+            else { return }
+            let previewViewController = PreviewViewController(title: cell1.inputTextView.text, author: "Матвей Правосудов", image: cell2.coverImageView.image)
+            previewViewController.modalPresentationStyle = .fullScreen
+            navigationController?.present(previewViewController, animated: true, completion: nil)
+        }
+    }
+    
     func didSelect(image: UIImage?) {
-        let imageView = UIImageView()
         let cell = mainTable.cellForRow(at: IndexPath(row: 0, section: 0)) as! CoverTableViewCell
-        cell.coverView.addSubview(imageView)
-        imageView.frame = cell.coverView.bounds
-        imageView.contentMode = .scaleAspectFill
-        imageView.image = image
+        cell.coverImageView.image = image
     }
 }
 extension CollectionViewController: TextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
-        mainTable.setContentOffset(CGPoint(x: 0, y: textView.frame.origin.y + (textView.frame.origin.y)), animated: true)
+        textView.drawBorder(10, width: 0.5, color: UIColor.black.withAlphaComponent(0.12))
+        textView.backgroundColor = .color(from: 0xF2F3F5)
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.drawBorder(10, width: 0.5, color: .color(from: 0xE64646))
+            textView.backgroundColor = .color(from: 0xFAEBEB)
+        }
     }
 }

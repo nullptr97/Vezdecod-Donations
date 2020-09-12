@@ -28,11 +28,15 @@ class BaseViewController: ViewController {
     func setupToolbar(title: String, isNeedBackButton: Bool) {
         toolbar.title = title
         toolbar.titleLabel.font = UIFont.boldSystemFont(ofSize: 21)
-        toolbar.rightViews = [rightButtonsView]
         toolbar.leftViews = isNeedBackButton ? [backButton] : []
         toolbar.dividerColor = .color(from: 0xD7D8D9)
         toolbar.dividerThickness = 0.33
         toolbar.dividerContentEdgeInsets = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
+        backButton.addTarget(self, action: #selector(dismiss), for: .touchUpInside)
+        
+        view.addSubview(rightButtonsView)
+        rightButtonsView.autoPinEdge(toSuperviewSafeArea: .top, withInset: 4)
+        rightButtonsView.autoPinEdge(.trailing, to: .trailing, of: view, withOffset: -4)
     }
 }
 extension CGSize {
